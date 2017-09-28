@@ -1,0 +1,17 @@
+# IntelliJ
+/lib/
+.idea/
+*.iml
+*.iws
+
+!dat16j-chat.iml
+
+# macOS
+.DS_Store
+
+# Maven
+log/
+target/
+
+# Local configuration files
+*_secret.*
