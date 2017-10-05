@@ -1,7 +1,7 @@
 package server;
 
-import server.model.ServerData;
 import server.model.WorkerData;
+import util.ProtocolHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,35 +49,46 @@ public class Server {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
 
-                System.out.println("[SERVER][WORKER:" + this.order + "]: Active");
+                System.out.println("[SERVER][WORKER: " + this.order + "]: Active");
 
                 while (true) { // listen indefinitely (up until QUIT, or connection drop) for commands
                     String message = in.readLine();
-                    System.out.println("[SERVER][WORKER:" + this.order + "]: Message received: " + message);
+                    System.out.println("[SERVER][WORKER: " + this.order + "]: Message received: " + message);
 
-                    if (message.startsWith(ServerData.Command.JOIN)) {
-                        String payload = this.getPayload(message, ServerData.Command.JOIN.length());
+                    if (message.startsWith(ProtocolHandler.Command.JOIN)) {
+                        String payload = ProtocolHandler.getPayload(message, ProtocolHandler.Command.JOIN.length());
 
-                        if (payload.length() > ServerData.Validation.USERNAME_MAX_LENGTH) {
+                        if (payload.length() > ProtocolHandler.Validation.USERNAME_MAX_LENGTH) {
                             // username invalid (reason: exceeds max length)
-                            out.println(ServerData.Command.usernameExceedsLengthStatusError());
-                        } else if (!payload.matches(ServerData.Validation.USERNAME_REGEX)) {
+                            System.out.println("[SERVER][WORKER: " + this.order + "]:     -> ✘ " +
+                                    ProtocolHandler.Command.Format.usernameExceedsLengthStatusError());
+
+                            out.println(ProtocolHandler.Command.Format.usernameExceedsLengthStatusError());
+                        } else if (!payload.matches(ProtocolHandler.Validation.USERNAME_REGEX)) {
                             // username invalid (reason: contains invalid characters)
-                            out.println(ServerData.Command.usernameInvalidCharStatusError());
+                            System.out.println("[SERVER][WORKER: " + this.order + "]:     -> ✘ " +
+                                    ProtocolHandler.Command.Format.usernameInvalidCharStatusError());
+
+                            out.println(ProtocolHandler.Command.Format.usernameInvalidCharStatusError());
                         } else {
                             // username string valid, check is the username is already taken
                             synchronized (store) {
                                 if (!store.containsKey(payload)) {
-                                    out.println(ServerData.Command.STATUS_OK);
+                                    System.out.println("[SERVER][WORKER: " + this.order + "]:     -> ✔ Username (" +
+                                            payload + ") is valid");
 
+                                    out.println(ProtocolHandler.Command.STATUS_OK);
                                     store.put(payload, new WorkerData(out));
                                 } else {
-                                    out.println(ServerData.Command.usernameTakenStatusError());
+                                    System.out.println("[SERVER][WORKER: " + this.order + "]:     -> ✘ " +
+                                            ProtocolHandler.Command.Format.usernameTakenStatusError());
+
+                                    out.println(ProtocolHandler.Command.Format.usernameTakenStatusError());
                                 }
                             }
                         }
-                    } else if (message.startsWith(ServerData.Command.DATA)) {
-                        String payload = this.getPayload(message, ServerData.Command.DATA.length());
+                    } else if (message.startsWith(ProtocolHandler.Command.DATA)) {
+                        String payload = ProtocolHandler.getPayload(message, ProtocolHandler.Command.DATA.length());
 
                         // TODO: Validate payload structure
                         synchronized (store) {
@@ -85,19 +96,19 @@ public class Server {
                                 entry.getValue().out.println(message);
                             }
                         }
-                    } else if (message.startsWith(ServerData.Command.ALIVE)) {
-                        String payload = this.getPayload(message, ServerData.Command.ALIVE.length());
-                    } else if (message.startsWith(ServerData.Command.QUIT)) {
-                        String payload = this.getPayload(message, ServerData.Command.QUIT.length());
+                    } else if (message.startsWith(ProtocolHandler.Command.ALIVE)) {
+                        String payload = ProtocolHandler.getPayload(message, ProtocolHandler.Command.ALIVE.length());
+                    } else if (message.startsWith(ProtocolHandler.Command.QUIT)) {
+                        String payload = ProtocolHandler.getPayload(message, ProtocolHandler.Command.QUIT.length());
                     } else {
-                        System.out.println("[SERVER][WORKER:" + this.order + "]: Unrecognized command!\n\t\t " + message);
+                        System.out.println("[SERVER][WORKER: " + this.order + "]: Unrecognized command!\n\t\t " + message);
                     }
                 }
 
             } catch (IOException exception) {
                 exception.printStackTrace();
             } finally {
-                System.out.println("[SERVER][WORKER:" + this.order + "]: Closing");
+                System.out.println("[SERVER][WORKER: " + this.order + "]: Closing");
                 // remove data
                 if (username != null) {
                     synchronized (store) {
@@ -105,10 +116,6 @@ public class Server {
                     }
                 }
             }
-        }
-
-        private String getPayload(String message, int commandLength) {
-            return message.substring(commandLength).trim();
         }
     }
 }

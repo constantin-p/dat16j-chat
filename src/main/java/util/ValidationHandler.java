@@ -9,6 +9,9 @@ import java.net.URISyntaxException;
 public class ValidationHandler {
 
     public static class Error {
+        public static final String CONNECTION = "Error connecting to the server";
+        public static final String INVALID_SERVER_RESPONSE = "Invalid server response";
+
         public static class Username {
             public static final String REQUIRED = "Username required";
             public static final String EXCEEDS_LENGTH = "Username exceeds max length (12 chars)";

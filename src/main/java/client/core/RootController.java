@@ -1,7 +1,9 @@
 package client.core;
 
-import client.core.section.ConnectController;
+import client.core.section.connect.ConnectController;
 import client.core.section.UISection;
+import client.core.section.session.SessionController;
+import client.core.section.session.SessionWorker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,11 +13,13 @@ import ui.CPTab;
 import ui.CPTabList;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class RootController {
 
     @FXML
     private CPTabList tabList;
+    private int index = 0;
 
     public RootController(Stage primaryStage) { }
 
@@ -24,6 +28,19 @@ public class RootController {
         this.loadSection("CONNECT", "＋", new ConnectController(this));
     }
 
+    public void addChatSession(Socket socket, String username) {
+        int currentIndex = index;
+        try {
+            SessionWorker session = new SessionWorker(socket, username, currentIndex);
+            this.loadSection("SESSION-" + System.currentTimeMillis(), session.getSessionName(), new SessionController(this, session));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            index++;
+        }
+    }
+
+    // Helpers
     private void loadSection(String id, String displayName, UISection controller) {
         // Load the template
         Node layout = loadSectionContent(controller);

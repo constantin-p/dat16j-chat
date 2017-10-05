@@ -8,11 +8,12 @@ import javafx.scene.control.Button;
 public class SectionBaseController {
 
     @FXML
-    private Button submitButton;
+    protected Button submitButton;
     protected BooleanProperty isDisabled = new SimpleBooleanProperty(false);
 
     @FXML
     public void initialize() {
+        submitButton.managedProperty().bind(submitButton.visibleProperty());
         submitButton.disableProperty().bind(isDisabled);
     }
 }
