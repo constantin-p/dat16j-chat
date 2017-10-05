@@ -1,0 +1,246 @@
+.root {
+  -cp-error-color: #ed1515;
+  -cp-accent-color: rgb(2, 177, 232);
+
+  -fx-accent: -cp-accent-color;
+
+  -cp-ui-light-color: #808080;
+  -cp-ui-base-color: rgb(59, 55, 60);
+  -cp-ui-dark-color: #333333;
+
+  -cp-control-base-color: #757575;
+  -cp-control-dark-color: #252525;
+  -cp-control-border-light-color: #c0c0c0;
+  -cp-control-border-base-color: #a6a6a6;
+
+  -cp-control-primary-base-color: #9861da;
+  -cp-control-primary-dark-color: #8353bb;
+
+  -cp-control-accent-gradient: linear-gradient(rgb(22, 202, 258), rgb(36, 192, 242));
+  -cp-control-light-gradient: linear-gradient(rgb(252, 253, 254), rgb(242, 243, 244));
+  -cp-control-base-gradient: linear-gradient(rgb(242, 243, 244), rgb(232, 233, 234));
+
+
+
+  -cp-ui-border-light-color: rgb(232, 232, 232);
+  -cp-ui-border-base-color: rgb(204, 206, 204);
+  -cp-ui-border-dark-color:rgb(192, 194, 196);
+
+  -cp-ui-shadow-accent-color: rgba(2, 177, 232, .2);
+  -cp-ui-shadow-base-color: rgba(192, 194, 196, .25);
+
+  -cp-control-radius: 1;
+
+
+
+
+
+  -cp-ui-bg-light-color: rgb(254, 254, 254);
+  -cp-ui-bg-base-color: rgb(247, 247, 247);
+  -cp-ui-bg-dark-color: rgb(227, 227, 227);
+
+
+  -cp-ui-border-light-color: rgb(232, 232, 232);
+  -cp-ui-border-base-color: rgb(228, 228, 228);
+  -cp-ui-border-dark-color:rgb(172, 172, 172);
+
+
+  -cp-control-light-color: rgb(160, 160, 160);
+  -cp-control-base-color: rgb(102, 102, 102);
+
+  -cp-control-active-color: rgb(0, 150, 229);
+
+
+
+  -fx-accent: -cp-control-active-color;
+  -fx-focus-color: -cp-control-active-color;
+}
+
+
+
+
+.label {
+  -fx-text-fill: -cp-control-base-color;
+}
+/*
+ *   List View
+ */
+.list-view {
+  -fx-background-color: -cp-ui-border-base-color, -cp-ui-bg-base-color;
+  -fx-background-insets: 0, 0 2 0 0;
+  -fx-padding: 0 2 0 0;
+}
+
+.list-cell,
+.list-cell:odd,
+.list-cell:event {
+  -fx-background-color: -cp-ui-bg-base-color;
+  -fx-padding: 5 0 5 0;
+  -fx-text-fill: -cp-ui-light-color;
+}
+
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected .cp-tab-cell-label,
+.list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected .cp-tab-cell-label {
+  -fx-text-fill: -cp-control-active-color;
+}
+
+.list-view .cp-tab-cell {
+  -fx-background-radius: 2;
+  -fx-background-color: -cp-ui-border-light-color;
+  -fx-background-insets: 0;
+  -fx-cursor: hand;
+}
+
+.list-view .cp-tab-cell-label {
+  -fx-font-size: 15;
+  -fx-text-fill: -cp-control-base-color;
+  -fx-font-weight: 900;
+}
+
+.list-view .cp-tab-shortcut {
+  -fx-font-size: 11;
+  -fx-font-weight: 700;
+  -fx-font-family: 'PT Mono', 'Courier New', monospace;
+  -fx-text-fill: -cp-control-light-color;
+}
+
+
+/*
+ *  Panes
+ */
+.dark-pane {
+  -fx-background-color: -cp-ui-bg-dark-color;
+}
+
+.base-pane {
+  -fx-background-color: -cp-ui-bg-base-color;
+}
+
+.light-pane {
+  -fx-background-color: -cp-ui-bg-light-color;
+}
+
+
+/*
+ *   Split Pane
+ */
+.split-pane {
+  -fx-padding: 0;
+}
+.split-pane > .split-pane-divider {
+  -fx-padding: 0 1 0 1;
+}
+.split-pane:horizontal > .split-pane-divider {
+  -fx-background-color: -cp-ui-border-base-color;
+  -fx-background-insets: 0 0 0 0;
+}
+
+
+/*
+ *   Inputs
+ */
+.text-field {
+  -fx-padding: 5 12 4 8;
+  -fx-border-width: 0;
+  -fx-border-insets: 0, 0;
+  -fx-background-color: rgb(210, 210, 210), -cp-ui-bg-light-color;
+  -fx-background-insets: 0, 1;
+  -fx-background-radius: 3, 2;
+  -fx-text-fill: -cp-control-base-color;
+}
+
+.text-field:hover,
+.text-area:hover {
+  -fx-text-fill: -cp-control-base-color;
+}
+
+.text-field {
+  -fx-prompt-text-fill: -cp-control-base-color;
+}
+.text-field:focused {
+  -fx-prompt-text-fill: -cp-control-base-color;
+}
+
+.text-field:focused,
+.text-area:focused {
+  -fx-background-color: -cp-control-active-color, -cp-ui-bg-light-color;
+  -fx-background-insets: 0, 1;
+  -fx-text-fill: -cp-ui-base-color;
+}
+
+/*
+ *  Buttons
+ */
+.button.text-button {
+  -fx-padding: 1;
+  -fx-border-width: 0;
+  -fx-text-fill: -cp-control-active-color;
+  -fx-background-color: transparent;
+  -fx-cursor: hand;
+}
+
+.button.text-button:hover {
+  -fx-text-fill: -cp-control-active-color;
+  -fx-underline: true;
+}
+
+
+/*
+ *  Scroll
+ */
+.scroll-bar:vertical {
+  -fx-background-color: transparent;
+  -fx-padding: 5 2;
+}
+
+.scroll-bar:horizontal {
+  -fx-background-color: transparent;
+  -fx-padding: 2 5;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+  -fx-background-color: -cp-ui-bg-base-color;
+  -fx-background-insets: 0;
+  -fx-background-radius: 2;
+  -fx-border-radius: 0;
+  -fx-border-width: 0;
+  -fx-padding: 0;
+}
+
+.scroll-bar:horizontal .increment-button ,
+.scroll-bar:horizontal .decrement-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0em;
+  -fx-padding: 0 0 6 0;
+}
+
+
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0em;
+  -fx-padding: 0 6 0 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+  -fx-background-color: -cp-ui-border-base-color;
+  -fx-background-insets: 0;
+  -fx-background-radius: 2;
+  -fx-border-radius: 0;
+  -fx-border-width: 0;
+  -fx-padding: 0;
+}
+
+.scroll-bar:horizontal:hover .thumb,
+.scroll-bar:vertical:hover .thumb {
+  -fx-background-color: -cp-ui-border-dark-color;
+}
