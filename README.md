@@ -1,6 +1,7 @@
 # Java chat project
 
-### Protocol
+### Protocol 
+Documentation at [doc/protocol.md](doc/protocol.md).
 
 ```
 Client -> Server                                Server -> Client
