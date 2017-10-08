@@ -1,5 +1,19 @@
 # Java chat project
 
+### Screenshots
+
+![Chat Session Overview](doc/screenshots/overview_chat.png)
+
+![Chat Connect Screen](doc/screenshots/overview_connect.png)
+
+
+
+### Quick Start
+1. Server CLI: run [`server.Main`](src/main/java/client/Main.java)
+2. Client GUI: run [`client.Main`](src/main/java/server/Main.java) (NOTE: [`9567`](src/main/java/util/ProtocolHandler.java#L6) is the default port)
+
+
+
 ### Protocol 
 Documentation at [doc/protocol.md](doc/protocol.md).
 
@@ -18,4 +32,4 @@ QUIT
 ## License
 
 This project is MIT licensed.
-Please see the LICENSE file for more information.
+Please see the [LICENSE](LICENSE) file for more information.
