@@ -31,8 +31,12 @@ public class RootController {
     public void addChatSession(Socket socket, String username) {
         int currentIndex = index;
         try {
-            SessionWorker session = new SessionWorker(socket, username, currentIndex);
-            this.loadSection("SESSION-" + System.currentTimeMillis(), session.getSessionName(), new SessionController(this, session));
+            SessionWorker session = new SessionWorker(currentIndex, socket, username);
+
+            String id = "SESSION-" + System.currentTimeMillis();
+            this.loadSection(id, session.getSessionName(), new SessionController(session, () -> {
+                this.tabList.removeTab(id);
+            }));
         } catch (IOException exception) {
             exception.printStackTrace();
         } finally {

@@ -30,7 +30,7 @@ public class JoinWorker {
         void call();
     };
 
-    public JoinWorker(Socket socket, String username,
+    protected JoinWorker(Socket socket, String username,
                       StartCallback startCallback, SuccessCallback successCallback, FailureCallback failureCallback, CancellationCallback cancellationCallback) {
 
         startCallback.call();
@@ -38,7 +38,7 @@ public class JoinWorker {
         new Thread(this.task).start();
     }
 
-    public boolean cancel() {
+    protected boolean cancel() {
         if (this.task != null) {
             return this.task.cancel(false);
         } else {
@@ -78,7 +78,7 @@ public class JoinWorker {
             } else if (message.startsWith(ProtocolHandler.Command.STATUS_ERROR)) {
                 String payload = ProtocolHandler.getPayload(message, ProtocolHandler.Command.STATUS_ERROR.length());
                 String[] payloadParts = payload.split(":");
-                if (payloadParts.length < 2 && (payloadParts[0].isEmpty() || payloadParts[1].isEmpty())) {
+                if (payloadParts.length < 2 || payloadParts[0].isEmpty()) {
                     System.out.println("[CLIENT]: Username rejected!\n\t\t " +
                             ValidationHandler.Error.INVALID_SERVER_RESPONSE + ": " + message);
                     return new Response(false, ValidationHandler.Error.INVALID_SERVER_RESPONSE);

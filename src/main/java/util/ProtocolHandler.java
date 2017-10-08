@@ -1,12 +1,17 @@
 package util;
 
+import java.time.Duration;
+
 public class ProtocolHandler {
     public static final int DEFAULT_PORT = 9567;
+    public static final Duration DEFAULT_ACTIVE_CHECK_INTERVAL = Duration.ofMinutes(1);
+    public static final Duration DEFAULT_ACTIVE_CHECK_DELAY = Duration.ofSeconds(30); // used to account for network latency
 
     public static class Command {
         public static final String JOIN = "JOIN";
         public static final String DATA = "DATA";
         public static final String ALIVE = "IMAV";
+        public static final String LIST = "LIST";
         public static final String QUIT = "QUIT";
         public static final String STATUS_OK = "J_OK";
         public static final String STATUS_ERROR = "J_ER";
@@ -14,13 +19,19 @@ public class ProtocolHandler {
         public static class Format {
             public static final String JOIN = "JOIN %s"; // username
             public static final String DATA = "DATA %s: %s"; // username, text
-            public static final String ALIVE = "IMAV";
-            public static final String QUIT = "QUIT";
-            public static final String STATUS_OK = "J_OK";
+            public static final String LIST = "LIST %s"; // username, text
             public static final String STATUS_ERROR = "J_ER %d:%s";
 
             public static String join(String username) {
                 return String.format(JOIN, username);
+            }
+
+            public static String data(String username, String message) {
+                return String.format(DATA, username, message);
+            }
+
+            public static String list(String userList) {
+                return String.format(LIST, userList);
             }
 
             public static String usernameExceedsLengthStatusError() {
@@ -50,8 +61,21 @@ public class ProtocolHandler {
     }
 
     public static class Validation {
-        public static final String USERNAME_REGEX = "^[a-zA-Z0-9_-]*$"; // a-z, A-Z, 0-9, _ ,  -
-        public static final int USERNAME_MAX_LENGTH = 12;
+
+        public static class Rule {
+            public static class Username {
+                public static final int MAX_LENGTH = 12;
+                public static final String VALID_CHAR = "^[a-zA-Z0-9_-]*$"; // a-z, A-Z, 0-9, _ , -
+            }
+
+            public static class Port {
+                public static final String VALID_CHAR = "^[0-9]+$";
+            }
+
+            public static class Message {
+                public static final int MAX_LENGTH = 250;
+            }
+        }
     }
 
     public static String getPayload(String message, int commandLength) {

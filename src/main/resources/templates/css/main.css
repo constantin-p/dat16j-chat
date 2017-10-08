@@ -1,39 +1,12 @@
 .root {
-  -cp-error-color: #ed1515;
-  -cp-accent-color: rgb(2, 177, 232);
-
-  -fx-accent: -cp-accent-color;
-
-  -cp-ui-light-color: #808080;
-  -cp-ui-base-color: rgb(59, 55, 60);
-  -cp-ui-dark-color: #333333;
-
-  -cp-control-base-color: #757575;
-  -cp-control-dark-color: #252525;
-  -cp-control-border-light-color: #c0c0c0;
-  -cp-control-border-base-color: #a6a6a6;
-
-  -cp-control-primary-base-color: #9861da;
-  -cp-control-primary-dark-color: #8353bb;
-
-  -cp-control-accent-gradient: linear-gradient(rgb(22, 202, 258), rgb(36, 192, 242));
-  -cp-control-light-gradient: linear-gradient(rgb(252, 253, 254), rgb(242, 243, 244));
-  -cp-control-base-gradient: linear-gradient(rgb(242, 243, 244), rgb(232, 233, 234));
+  -cp-error-color: #FF3B30;
 
 
 
-  -cp-ui-border-light-color: rgb(232, 232, 232);
-  -cp-ui-border-base-color: rgb(204, 206, 204);
-  -cp-ui-border-dark-color:rgb(192, 194, 196);
-
-  -cp-ui-shadow-accent-color: rgba(2, 177, 232, .2);
-  -cp-ui-shadow-base-color: rgba(192, 194, 196, .25);
-
-  -cp-control-radius: 1;
-
-
-
-
+  -cp-control-base-gradient: linear-gradient(rgb(198, 197, 198), rgb(175, 175, 175));
+  -cp-ui-shadow-base-color-one: rgba(175, 175, 175, .05);
+  -cp-ui-shadow-base-color-two: rgba(175, 175, 175, .14);
+  -cp-ui-shadow-base-color-three: rgba(175, 175, 175, .18);
 
   -cp-ui-bg-light-color: rgb(254, 254, 254);
   -cp-ui-bg-base-color: rgb(247, 247, 247);
@@ -44,24 +17,21 @@
   -cp-ui-border-base-color: rgb(228, 228, 228);
   -cp-ui-border-dark-color:rgb(172, 172, 172);
 
-
   -cp-control-light-color: rgb(160, 160, 160);
   -cp-control-base-color: rgb(102, 102, 102);
+  -cp-control-dark-color: rgb(59, 55, 60);
 
   -cp-control-active-color: rgb(0, 150, 229);
-
-
 
   -fx-accent: -cp-control-active-color;
   -fx-focus-color: -cp-control-active-color;
 }
 
 
-
-
 .label {
   -fx-text-fill: -cp-control-base-color;
 }
+
 /*
  *   List View
  */
@@ -76,7 +46,7 @@
 .list-cell:event {
   -fx-background-color: -cp-ui-bg-base-color;
   -fx-padding: 5 0 5 0;
-  -fx-text-fill: -cp-ui-light-color;
+  -fx-text-fill: -cp-control-light-color;
 }
 
 
@@ -105,12 +75,86 @@
   -fx-text-fill: -cp-control-light-color;
 }
 
+/*
+ *  Session sidebar
+ */
+.sidebar-header .user-list-label,
+.sidebar-header .button.text-button {
+  -fx-padding: 6 0 6 0;
+  -fx-font-size: 12;
+  -fx-font-weight: 700;
+}
+
+.sidebar-header .user-list-label{
+  -fx-text-fill: -cp-control-base-color;
+}
+
+.user-list-view {
+  -fx-padding: 3 0 0 0;
+  -fx-background-insets: 0, 0;
+}
+
+.user-list-view .list-cell,
+.user-list-view .list-cell:odd,
+.user-list-view .list-cell:event {
+  -fx-padding: 2 0 2 0;
+  -fx-text-fill: -cp-control-dark-color;
+}
+
+
+
+/*
+ *  Session content
+ */
+.message-list-view {
+  -fx-background-color: -cp-ui-border-base-color, -cp-ui-bg-light-color;
+  -fx-background-insets: 0, 0;
+}
+
+.message-list-view .list-cell,
+.message-list-view .list-cell:odd,
+.message-list-view .list-cell:event {
+  -fx-background-color: -cp-ui-bg-light-color;
+  -fx-padding: 5 0 5 0;
+}
+
+.message-list-view .list-cell .message-author {
+  -fx-font-size: 13;
+  -fx-font-weight: 700;
+  -fx-font-family: 'PT Mono', 'Courier New', monospace;
+  -fx-text-fill: -cp-control-light-color;
+  -fx-padding: 1 5 0 0;
+}
+
+.message-list-view .list-cell .current-author .message-author {
+  -fx-text-fill: -cp-control-active-color;
+}
+
+
+.message-list-view .list-cell .message-content {
+  -fx-font-size: 14;
+  -fx-text-fill: -cp-control-dark-color;
+  -fx-padding: 0 6 0 0;
+}
+
+
+.footer-pane {
+  -fx-padding: 1 8 0 0;
+  -fx-background-color: -cp-ui-border-base-color, -cp-ui-bg-light-color;
+  -fx-background-insets: 0, 1 0 0 0;
+}
+
+.footer-pane .text-field {
+  -fx-padding: 8;
+  -fx-background-insets: 0, 0;
+}
+
 
 /*
  *  Panes
  */
 .dark-pane {
-  -fx-background-color: -cp-ui-bg-dark-color;
+  -fx-background-color: red;
 }
 
 .base-pane {
@@ -119,6 +163,10 @@
 
 .light-pane {
   -fx-background-color: -cp-ui-bg-light-color;
+}
+
+.disconnect-overlay {
+  -fx-background-color: rgba(247, 247, 247, .78);
 }
 
 
@@ -166,12 +214,23 @@
 .text-area:focused {
   -fx-background-color: -cp-control-active-color, -cp-ui-bg-light-color;
   -fx-background-insets: 0, 1;
-  -fx-text-fill: -cp-ui-base-color;
+  -fx-text-fill: -cp-control-dark-color;
 }
 
 /*
  *  Buttons
  */
+.button {
+  -fx-padding: 3 12 6 12;
+  -fx-border-width: 0;
+  -fx-background-color: -cp-ui-shadow-base-color-one, -cp-ui-shadow-base-color-two, -cp-ui-shadow-base-color-three,
+      -cp-control-base-gradient, white;
+  -fx-background-insets: 0, 0 0 1 0, 0 0 2 0, 0 0 3 0, 1 1 4 1;
+  -fx-background-radius: 7, 6, 5, 4, 4;
+  -fx-text-fill: -cp-control-dark-color;
+  -fx-cursor: hand;
+}
+
 .button.text-button {
   -fx-padding: 1;
   -fx-border-width: 0;
@@ -185,6 +244,20 @@
   -fx-underline: true;
 }
 
+.button.info-button {
+  -fx-padding: 3 6 6 6;
+  -fx-background-color: transparent;
+
+  -fx-font-weight: 700;
+  -fx-font-family: 'PT Mono', 'Courier New', monospace;
+  -fx-text-fill: -cp-control-base-color;
+
+  -fx-cursor: hand;
+}
+
+.button.info-button:hover {
+  -fx-text-fill: -cp-control-active-color;
+}
 
 /*
  *  Scroll
@@ -240,7 +313,11 @@
   -fx-padding: 0;
 }
 
-.scroll-bar:horizontal:hover .thumb,
-.scroll-bar:vertical:hover .thumb {
-  -fx-background-color: -cp-ui-border-dark-color;
+.virtual-flow:hover .scroll-bar:horizontal .thumb,
+.virtual-flow:hover .scroll-bar:vertical .thumb {
+  -fx-background-color: derive(-cp-ui-border-base-color, -16%);
+}
+
+.corner {
+  -fx-background-color: transparent;
 }

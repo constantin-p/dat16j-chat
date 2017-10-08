@@ -11,6 +11,8 @@ public class ValidationHandler {
     public static class Error {
         public static final String CONNECTION = "Error connecting to the server";
         public static final String INVALID_SERVER_RESPONSE = "Invalid server response";
+        public static final String INVALID_SERVER_MESSAGE = "Invalid server message";
+        public static final String INVALID_CLIENT_MESSAGE = "Invalid client message";
 
         public static class Username {
             public static final String REQUIRED = "Username required";
@@ -28,18 +30,13 @@ public class ValidationHandler {
             public static final String REQUIRED = "Port required";
             public static final String INVALID = "Port invalid";
         }
-    }
 
-    public static class Rule {
-        public static class Username {
-            public static final int MAX_LENGTH = 12;
-            public static final String VALID_CHAR = "^[a-zA-Z0-9_-]*$"; // a-z, A-Z, 0-9, _ , -
-        }
-
-        public static class Port {
-            public static final String VALID_CHAR = "^[0-9]+$";
+        public static class Message {
+            public static final String REQUIRED = "Message required";
+            public static final String EXCEEDS_LENGTH = "Message exceeds max length (250 chars)";
         }
     }
+
 
     public static boolean validateControl(Control control, Label errorLabel, Response validation) {
         if (showError(errorLabel, validation)) {
@@ -67,9 +64,9 @@ public class ValidationHandler {
     public static Response validateUsername(String username) {
         if(username == null || username.isEmpty()) {
             return new Response(false, Error.Username.REQUIRED);
-        } else if (username.length() > Rule.Username.MAX_LENGTH) {
+        } else if (username.length() > ProtocolHandler.Validation.Rule.Username.MAX_LENGTH) {
             return new Response(false, Error.Username.EXCEEDS_LENGTH);
-        } else if (!username.matches(Rule.Username.VALID_CHAR)) {
+        } else if (!username.matches(ProtocolHandler.Validation.Rule.Username.VALID_CHAR)) {
             return new Response(false, Error.Username.INVALID_CHAR);
         }
         return new Response(true);
@@ -94,8 +91,17 @@ public class ValidationHandler {
     public static Response validatePort(String port) {
         if(port == null || port.isEmpty()) {
             return new Response(false, Error.Port.REQUIRED);
-        } else if (!port.matches(Rule.Port.VALID_CHAR)) {
+        } else if (!port.matches(ProtocolHandler.Validation.Rule.Port.VALID_CHAR)) {
             return new Response(false, Error.Port.INVALID);
+        }
+        return new Response(true);
+    }
+
+    public static Response validateMessage(String message) {
+        if(message == null || message.isEmpty()) {
+            return new Response(false, Error.Message.REQUIRED);
+        } else if (message.length() > ProtocolHandler.Validation.Rule.Message.MAX_LENGTH) {
+            return new Response(false, Error.Message.EXCEEDS_LENGTH);
         }
         return new Response(true);
     }

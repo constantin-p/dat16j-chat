@@ -25,7 +25,6 @@ public class CPTabList extends HBox {
     }
 
     public void addTab(CPTab tab, Node content) {
-
         this.tabs.add(new CPTabWrapper(tab, content, () -> {
             for (CPTabWrapper tabWrapper: this.tabs) {
                 this.setTabAsActive(tab);
@@ -35,6 +34,20 @@ public class CPTabList extends HBox {
         this.content.getChildren().add(content);
     }
 
+    public void removeTab(String id) {
+        for (CPTabWrapper tabWrapper: this.tabs) {
+            if (tabWrapper.tab.id.equals(id)) {
+                this.content.getChildren().remove(tabWrapper.content);
+                this.tabs.remove(tabWrapper);
+                break;
+            }
+        }
+
+        for (CPTabWrapper tabWrapper: this.tabs) {
+            tabWrapper.content.setVisible(true);
+            break;
+        }
+    }
 
     // Helpers
     private void setTabAsActive(CPTab tab) {
