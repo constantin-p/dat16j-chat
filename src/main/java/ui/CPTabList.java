@@ -14,6 +14,7 @@ public class CPTabList extends HBox {
 
     private ObservableList<CPTabWrapper> tabs = FXCollections.observableArrayList();
 
+    // TODO: Implement shortcut navigation
     public CPTabList() {
         super();
 

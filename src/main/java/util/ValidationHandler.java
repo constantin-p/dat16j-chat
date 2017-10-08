@@ -18,7 +18,6 @@ public class ValidationHandler {
             public static final String REQUIRED = "Username required";
             public static final String EXCEEDS_LENGTH = "Username exceeds max length (12 chars)";
             public static final String INVALID_CHAR = "Invalid username (a-z, A-Z, 0-9, _ , - )";
-            public static final String TAKEN = "Username already registered";
         }
 
         public static class Host {

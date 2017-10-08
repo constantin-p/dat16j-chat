@@ -19,7 +19,7 @@ public class ProtocolHandler {
         public static class Format {
             public static final String JOIN = "JOIN %s"; // username
             public static final String DATA = "DATA %s: %s"; // username, text
-            public static final String LIST = "LIST %s"; // username, text
+            public static final String LIST = "LIST %s"; // username1 username2 username3 ...
             public static final String STATUS_ERROR = "J_ER %d:%s";
 
             public static String join(String username) {
