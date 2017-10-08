@@ -1,13 +1,11 @@
 package client.core.section.session;
 
-import client.core.RootController;
 import client.core.section.SectionBaseController;
 import client.core.section.UISection;
 import client.model.Message;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

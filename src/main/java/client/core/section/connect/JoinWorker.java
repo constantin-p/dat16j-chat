@@ -1,15 +1,12 @@
 package client.core.section.connect;
 
+import client.model.ClientSocketData;
 import javafx.concurrent.Task;
 import util.ProtocolHandler;
 import util.Response;
 import util.ValidationHandler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class JoinWorker {
     private JoinTask task;
@@ -30,11 +27,11 @@ public class JoinWorker {
         void call();
     };
 
-    protected JoinWorker(Socket socket, String username,
-                      StartCallback startCallback, SuccessCallback successCallback, FailureCallback failureCallback, CancellationCallback cancellationCallback) {
+    protected JoinWorker(ClientSocketData clientSocketData, String username,
+                         StartCallback startCallback, SuccessCallback successCallback, FailureCallback failureCallback, CancellationCallback cancellationCallback) {
 
         startCallback.call();
-        this.task = new JoinTask(socket, username, successCallback, failureCallback, cancellationCallback);
+        this.task = new JoinTask(clientSocketData, username, successCallback, failureCallback, cancellationCallback);
         new Thread(this.task).start();
     }
 
@@ -47,16 +44,16 @@ public class JoinWorker {
     }
 
     private class JoinTask extends Task<Response> {
-        private Socket socket;
+        private ClientSocketData clientSocketData;
         private String username;
 
         private SuccessCallback successCallback;
         private FailureCallback failureCallback;
         private CancellationCallback cancellationCallback;
 
-        protected JoinTask(Socket socket, String username,
+        protected JoinTask(ClientSocketData clientSocketData, String username,
                            SuccessCallback successCallback, FailureCallback failureCallback, CancellationCallback cancellationCallback) {
-            this.socket = socket;
+            this.clientSocketData = clientSocketData;
             this.username = username;
 
             this.successCallback = successCallback;
@@ -64,15 +61,14 @@ public class JoinWorker {
             this.cancellationCallback = cancellationCallback;
         }
 
+        // TODO: handle server shutdown
         @Override
         protected Response call() throws IOException {
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
 
-            out.println(ProtocolHandler.Command.Format.join(this.username));
+            this.clientSocketData.out.println(ProtocolHandler.Command.Format.join(this.username));
 
             // Listen for the server response
-            String message = in.readLine();
+            String message = this.clientSocketData.in.readLine();
             if (message.startsWith(ProtocolHandler.Command.STATUS_OK)) {
                 return new Response(true, this.username);
             } else if (message.startsWith(ProtocolHandler.Command.STATUS_ERROR)) {

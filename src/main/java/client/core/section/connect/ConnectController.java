@@ -3,6 +3,7 @@ package client.core.section.connect;
 import client.core.RootController;
 import client.core.section.SectionBaseController;
 import client.core.section.UISection;
+import client.model.ClientSocketData;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -14,13 +15,11 @@ import javafx.scene.control.TextField;
 import util.Response;
 import util.ValidationHandler;
 
-import java.net.Socket;
-
 public class ConnectController extends SectionBaseController implements UISection {
     private static final String TEMPLATE_PATH = "templates/section/connect.fxml";
 
     private RootController rootController;
-    private Socket socket;
+    private ClientSocketData clientSocketData;
 
     @FXML
     private Label errorLabel;
@@ -56,11 +55,11 @@ public class ConnectController extends SectionBaseController implements UISectio
         super.initialize();
 
         super.isDisabled.bind(
-                isUsernameValid.not().or(
-                        isHostValid.not().or(
-                                isPortValid.not()
-                        )
+            isUsernameValid.not().or(
+                isHostValid.not().or(
+                    isPortValid.not()
                 )
+            )
         );
 
         joinButton.disableProperty().bind(isUsernameValid.not());
@@ -111,10 +110,10 @@ public class ConnectController extends SectionBaseController implements UISectio
 
     @FXML
     public void handleJOINAction(ActionEvent event) {
-        if (this.socket != null) {
+        if (this.clientSocketData != null) {
             String username = this.usernameTextField.getText();
 
-            this.setupJoinTaskUI(this.socket, username);
+            this.setupJoinTaskUI(this.clientSocketData, username);
         }
     }
 
@@ -128,7 +127,7 @@ public class ConnectController extends SectionBaseController implements UISectio
             this.cancelButton.setVisible(true);
             this.loadingLabel.setText("Connecting     ");
             System.out.println("Start");
-        }, (Socket socket) -> {
+        }, (ClientSocketData clientWorkerData) -> {
             // Success
             // 1. Hide task related ui (Cancel, Label, ProgressIndicator)
             this.cancelButton.setVisible(false);
@@ -138,8 +137,8 @@ public class ConnectController extends SectionBaseController implements UISectio
             this.loadingLabel.setText("Connected");
 
             // 3. Start JOIN task
-            this.socket = socket;
-            this.setupJoinTaskUI(this.socket, username);
+            this.clientSocketData = clientWorkerData;
+            this.setupJoinTaskUI(clientWorkerData, username);
         }, () -> {
             // Failure
             // 1. Hide task related ui (Cancel, Label, ProgressIndicator)
@@ -176,8 +175,8 @@ public class ConnectController extends SectionBaseController implements UISectio
         });
     }
 
-    private void setupJoinTaskUI(Socket socket, String username) {
-        JoinWorker joinWorker = new JoinWorker(socket, username, () -> {
+    private void setupJoinTaskUI(ClientSocketData clientSocketData, String username) {
+        JoinWorker joinWorker = new JoinWorker(clientSocketData, username, () -> {
             // Start
             // 1. Update UI
             this.joinButton.setVisible(false);
@@ -264,7 +263,7 @@ public class ConnectController extends SectionBaseController implements UISectio
     }
 
     private void addChat(String username) {
-        this.rootController.addChatSession(this.socket, username);
+        this.rootController.addChatSession(this.clientSocketData, username);
         this.resetConnectionScreen();
     }
 }

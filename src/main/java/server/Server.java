@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Server {
 
-    private HashMap<String, WorkerData> store = new HashMap<>();
+    private final HashMap<String, WorkerData> store = new HashMap<>();
     private int workerIndex = 0;
 
     protected Server(int port) throws IOException {
@@ -134,10 +134,10 @@ public class Server {
                                         store.put(payload, new WorkerData(out, () -> {
                                             this.requestClose();
                                         }));
-                                        this.username = payload;
 
                                         // Send the updated user list
                                         sendUserList();
+                                        this.username = payload;
                                     } else {
                                         System.out.println("[SERVER][WORKER: " + this.order + "]:     -> ✘ " +
                                                 ProtocolHandler.Command.Format.usernameTakenStatusError());

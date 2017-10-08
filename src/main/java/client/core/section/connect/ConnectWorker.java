@@ -1,5 +1,6 @@
 package client.core.section.connect;
 
+import client.model.ClientSocketData;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class ConnectWorker {
     };
 
     protected interface SuccessCallback {
-        void call(Socket socket);
+        void call(ClientSocketData clientSocketData);
     };
 
     protected interface FailureCallback {
@@ -41,7 +42,7 @@ public class ConnectWorker {
         }
     }
 
-    private class ConnectTask extends Task<Socket> {
+    private class ConnectTask extends Task<ClientSocketData> {
         private InetSocketAddress address;
         private Socket socket = new Socket();
 
@@ -58,10 +59,9 @@ public class ConnectWorker {
         }
 
         @Override
-        protected Socket call() throws IOException {
-            //Thread.sleep(4000);
+        protected ClientSocketData call() throws IOException {
             this.socket.connect(address);
-            return socket;
+            return new ClientSocketData(this.socket);
         }
 
         @Override

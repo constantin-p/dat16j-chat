@@ -1,5 +1,6 @@
 package client.core.section.session;
 
+import client.model.ClientSocketData;
 import client.model.Message;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -7,11 +8,7 @@ import javafx.collections.ObservableList;
 import util.ProtocolHandler;
 import util.ValidationHandler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,23 +17,17 @@ public class SessionWorker extends Thread {
     private boolean shutdown = false;
 
     private int index;
-    private Socket socket;
+    private ClientSocketData clientSocketData;
     protected String username;
 
     private ObservableList<Message> messageList = FXCollections.observableArrayList();;
     private ObservableList<String> userList = FXCollections.observableArrayList();;
     private Runnable onDisconnect = () -> {};
 
-    private BufferedReader in;
-    private PrintWriter out;
-
-    public SessionWorker(int index, Socket socket, String username) throws IOException {
+    public SessionWorker(int index, ClientSocketData clientSocketData, String username) throws IOException {
         this.index = index;
-        this.socket = socket;
+        this.clientSocketData = clientSocketData;
         this.username = username;
-
-        this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        this.out = new PrintWriter(this.socket.getOutputStream(), true);
     }
 
     protected void addLists(ObservableList<Message> messageList, ObservableList<String> userList) {
@@ -49,14 +40,14 @@ public class SessionWorker extends Thread {
     }
 
     protected void sendMessage(String message) {
-        if (out != null) {
-            out.println(ProtocolHandler.Command.Format.data(this.username, message));
+        if (this.clientSocketData.out != null) {
+            this.clientSocketData.out.println(ProtocolHandler.Command.Format.data(this.username, message));
         }
     }
 
-    protected void disconnect() {
-        if (out != null) {
-            out.println(ProtocolHandler.Command.QUIT);
+    public void disconnect() {
+        if (this.clientSocketData.out != null) {
+            this.clientSocketData.out.println(ProtocolHandler.Command.QUIT);
             this.requestClose();
         }
     }
@@ -66,8 +57,8 @@ public class SessionWorker extends Thread {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (out != null) {
-                    out.println(ProtocolHandler.Command.ALIVE);
+                if (clientSocketData.out != null) {
+                    clientSocketData.out.println(ProtocolHandler.Command.ALIVE);
                 }
             }
         }, 0, ProtocolHandler.DEFAULT_ACTIVE_CHECK_INTERVAL.toMillis());
@@ -80,7 +71,7 @@ public class SessionWorker extends Thread {
         Timer sendAlivePingWorker = this.startActivePingWorker();
         try {
             while (!this.shutdown) { // listen indefinitely for commands
-                String message = in.readLine();
+                String message = this.clientSocketData.in.readLine();
                 if (message == null) {
                     System.out.println("[SESSION][WORKER: " + this.index + "]: NULL received");
                     this.close();
@@ -129,7 +120,7 @@ public class SessionWorker extends Thread {
         this.shutdown = true;
         try {
             // Sends the 'FIN' on the network
-            socket.shutdownOutput();
+            this.clientSocketData.socket.shutdownOutput();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -139,7 +130,7 @@ public class SessionWorker extends Thread {
         this.shutdown = true;
         this.onDisconnect.run();
         try {
-            socket.close();
+            this.clientSocketData.socket.close();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
