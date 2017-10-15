@@ -15,3 +15,10 @@ target/
 
 # Local configuration files
 *_secret.*
+
+# Client app
+src/main/resources/client/
+
+src/main/java/ui/
+src/main/java/client/
+src/main/java/util/UIValidator.java
