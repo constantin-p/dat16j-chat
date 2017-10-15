@@ -110,6 +110,14 @@ public class Server {
 
                         if (message.startsWith(ProtocolHandler.Command.JOIN)) {
                             String payload = ProtocolHandler.getPayload(message, ProtocolHandler.Command.JOIN.length());
+                            // Handle the scenario when:
+                            //      JOIN <user_name>, <server_ip>: <server_port>
+                            // is used, instead of:
+                            //      JOIN <user_name> 
+                            if (payload.contains(",")) {
+                                String[] payloadParts = payload.split(",");
+                                payload = payloadParts[0];
+                            }
 
                             if (payload.length() > ProtocolHandler.Validation.Rule.Username.MAX_LENGTH) {
                                 // username invalid (reason: exceeds max length)
