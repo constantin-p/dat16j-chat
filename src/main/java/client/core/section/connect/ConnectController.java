@@ -13,10 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import util.Response;
+import util.UIValidator;
 import util.ValidationHandler;
 
 public class ConnectController extends SectionBaseController implements UISection {
-    private static final String TEMPLATE_PATH = "templates/section/connect.fxml";
+    private static final String TEMPLATE_PATH = "templates/connect.fxml";
 
     private RootController rootController;
     private ClientSocketData clientSocketData;
@@ -73,17 +74,17 @@ public class ConnectController extends SectionBaseController implements UISectio
 
         // Validation
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            isUsernameValid.set(ValidationHandler.validateControl(usernameTextField, errorLabel,
+            isUsernameValid.set(UIValidator.validateControl(usernameTextField, errorLabel,
                     ValidationHandler.validateUsername(newValue)));
         });
 
         hostTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            isHostValid.set(ValidationHandler.validateControl(hostTextField, errorLabel,
+            isHostValid.set(UIValidator.validateControl(hostTextField, errorLabel,
                     ValidationHandler.validateHost(newValue)));
         });
 
         portTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            isPortValid.set(ValidationHandler.validateControl(portTextField, errorLabel,
+            isPortValid.set(UIValidator.validateControl(portTextField, errorLabel,
                     ValidationHandler.validatePort(newValue)));
         });
 
@@ -152,7 +153,7 @@ public class ConnectController extends SectionBaseController implements UISectio
             this.portTextField.setDisable(false);
 
             super.submitButton.setVisible(true);
-            ValidationHandler.showError(this.errorLabel, new Response(false, ValidationHandler.Error.CONNECTION));
+            UIValidator.showError(this.errorLabel, new Response(false, ValidationHandler.Error.CONNECTION));
         }, () -> {
             // Cancellation
             // 1. Hide task related ui (Cancel, Label, ProgressIndicator)
@@ -166,7 +167,7 @@ public class ConnectController extends SectionBaseController implements UISectio
             this.portTextField.setDisable(false);
 
             super.submitButton.setVisible(true);
-            ValidationHandler.showError(this.errorLabel, new Response(true));
+            UIValidator.showError(this.errorLabel, new Response(true));
 
             System.out.println("Cancellation");
         });
@@ -205,7 +206,7 @@ public class ConnectController extends SectionBaseController implements UISectio
                 });
 
                 this.joinButton.setVisible(true);
-                ValidationHandler.showError(this.errorLabel, response);
+                UIValidator.showError(this.errorLabel, response);
             }
         }, () -> {
             // Failure
@@ -220,7 +221,7 @@ public class ConnectController extends SectionBaseController implements UISectio
             this.portTextField.setDisable(true);
 
             this.joinButton.setVisible(true);
-            ValidationHandler.showError(this.errorLabel, new Response(false, ValidationHandler.Error.CONNECTION));
+            UIValidator.showError(this.errorLabel, new Response(false, ValidationHandler.Error.CONNECTION));
         }, () -> {
             // Cancellation
             // 1. Hide task related ui (Cancel, Label, ProgressIndicator)
@@ -234,7 +235,7 @@ public class ConnectController extends SectionBaseController implements UISectio
             this.portTextField.setDisable(true);
 
             this.joinButton.setVisible(true);
-            ValidationHandler.showError(this.errorLabel, new Response(true, null));
+            UIValidator.showError(this.errorLabel, new Response(true, null));
 
             System.out.println("Cancellation");
         });

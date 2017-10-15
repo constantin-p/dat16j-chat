@@ -22,7 +22,7 @@ import util.ProtocolHandler;
 import util.ValidationHandler;
 
 public class SessionController extends SectionBaseController implements UISection {
-    private static final String TEMPLATE_PATH = "templates/section/session.fxml";
+    private static final String TEMPLATE_PATH = "templates/session.fxml";
 
     private SessionWorker sessionWorker;
     private Runnable removeSession;

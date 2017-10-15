@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-    private ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
     public Stage primaryStage;
 
@@ -28,7 +27,7 @@ public class Main extends Application {
 
     public void initRootLayout() {
         try {
-            FXMLLoader loader = new FXMLLoader(classLoader
+            FXMLLoader loader = new FXMLLoader(getClass()
                     .getResource("templates/root.fxml"));
 
             RootController controller = new RootController(primaryStage);
